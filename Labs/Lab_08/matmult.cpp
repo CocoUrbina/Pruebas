@@ -58,7 +58,7 @@ int main(int argc, char* argv[]){
   for(int i = 0; i < l; ++i){
     for(int j = 0; j < m; ++j){
       for(int k = 0; k < n; ++k){
-        // Su código aquí
+        C[i * m + j] += A[i * n + k] * B[k * m + j];
       }
     }
   }
