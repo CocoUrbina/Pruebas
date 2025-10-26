@@ -10,7 +10,7 @@ Matrix::Matrix(){
 Matrix::Matrix(int n, int m){
   n_rows = n;
   n_cols = m;
-  data = new double[n_rows * n_cols];
+  data = new double[n_rows * n_cols]();
 }
 
 // Destructor (3)
@@ -32,8 +32,8 @@ Matrix::Matrix(const Matrix &obj){
 Matrix &Matrix::operator=(const Matrix &obj){
   std::cout << "Assignment operator invoked!" << std::endl;
 
-  if (this == &obj) return *this; // auto-asignación
-  delete[] data; // liberar memoria actual
+  if (this == &obj) return *this; // autoasignación
+  delete[] data; // libera memoria
 
   n_rows = obj.n_rows;
   n_cols = obj.n_cols;
@@ -47,11 +47,11 @@ Matrix &Matrix::operator=(const Matrix &obj){
 }
 
 // Getters (6)
-int Matrix::get_rows(){
+int Matrix::get_rows() const{
   return n_rows;
 }
 
-int Matrix::get_cols(){
+int Matrix::get_cols() const{
   return n_cols;
 }
 
@@ -68,8 +68,7 @@ void print_matrix(const Matrix &m){
 // Sobercarga Suma
 Matrix Matrix::operator+(const Matrix &other) const {
     if (n_rows != other.n_rows || n_cols != other.n_cols) {
-        std::cerr << "Error: dimensiones incompatibles para suma de matrices" << std::endl;
-        exit(EXIT_FAILURE);
+        throw std::invalid_argument("Dimensiones incompatibles para la suma de matrices.");
     }
 
     Matrix result(n_rows, n_cols); // matriz resultado
@@ -82,15 +81,14 @@ Matrix Matrix::operator+(const Matrix &other) const {
 }
 
 //Sobrecarga Resta
-Matrix Matrix::operator-(const Matrix &other) const {
+Matrix Matrix::operator-(const Matrix &other) const{
     if (n_rows != other.n_rows || n_cols != other.n_cols) {
-        std::cerr << "Error: dimensiones incompatibles para resta de matrices" << std::endl;
-        exit(EXIT_FAILURE);
+        throw std::invalid_argument("Dimensiones incompatibles para la resta de matrices.");
     }
 
     Matrix result(n_rows, n_cols);
 
-    for (int i = 0; i < n_rows * n_cols; ++i) {
+    for (int i = 0; i < n_rows * n_cols; ++i){
         result.data[i] = data[i] - other.data[i];
     }
 
@@ -98,10 +96,9 @@ Matrix Matrix::operator-(const Matrix &other) const {
 }
 
 // Sobrecarga Multiplicacion
-Matrix Matrix::operator*(const Matrix &other) const {
-    if (n_cols != other.n_rows) {
-        std::cerr << "Error: dimensiones incompatibles para multiplicación de matrices" << std::endl;
-        exit(EXIT_FAILURE);
+Matrix Matrix::operator*(const Matrix &other) const{
+    if (n_cols != other.n_rows){
+        throw std::invalid_argument("Dimensiones incompatibles para la multiplicacion  de matrices.");
     }
 
     Matrix result(n_rows, other.n_cols);
