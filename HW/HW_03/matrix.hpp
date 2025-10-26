@@ -15,6 +15,13 @@ class Matrix {
     ~Matrix(); // Destructor (3)
     Matrix(const Matrix &obj); // Copy Constructor Deep (4)
     Matrix &operator=(const Matrix &obj); // Assignment Operator (5)
+    
+    // Sobrecargas (8)
+    Matrix operator+(const Matrix &other) const;
+    Matrix operator-(const Matrix &other) const;
+    Matrix operator*(const Matrix &other) const;
 };
+
+void print_matrix(const Matrix &m); // Para imprimir (7)
 
 #endif
