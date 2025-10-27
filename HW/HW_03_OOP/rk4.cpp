@@ -1,7 +1,7 @@
 #include <iostream>
 
 // Step RK4
-double step_rk4(double (func*)(double, double), double x, double y, double h){
+double step_rk4(double (*func)(double, double), double x, double y, double h){
   double k_1 = func(x, y);
   double k_2 = func(x + h/2.0, y + h*k_1/2.0);
   double k_3 = func(x + h/2.0, y + h*k_2/2.0);
@@ -11,7 +11,7 @@ double step_rk4(double (func*)(double, double), double x, double y, double h){
 }
 
 // Integral
-double int_rk4(double (func*)(double, double), double x_0, double x_1, double y_0, int N){
+double int_rk4(double (*func)(double, double), double x_0, double x_1, double y_0, int N){
   double h = (x_1 - x_0) / N;
   double x = x_0;
   double y = y_0;
@@ -35,7 +35,7 @@ int main() {
     double y_0 = 1.0; // Initial condition
     int N = 100;     // Steps
 
-    double y_final = int_rk4(f, x_0, x_1, y_0, N);
+    double y_final = int_rk4(func, x_0, x_1, y_0, N);
 
     std::cout << "y(" << x_1 << ") ≈ " << y_final << "\n";
 
