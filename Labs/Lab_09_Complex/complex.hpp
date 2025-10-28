@@ -5,10 +5,11 @@ class Complex {
   private:
     double real;
     double imag;
-    // Default Constructor (3)
-    Complex();
 
   public:
+    //Default Constructor (3)
+    Complex();
+
     // Custom Constructor (4)
     Complex(double a, double b);
 
@@ -22,15 +23,21 @@ class Complex {
     ~Complex();
 
     // Norm (8)
-    double norm();
+    double norm() const;
 
     // Conjugate (9)
-    
+    Complex conjugate() const;
+
     // Sobrecargas (10)
     Complex operator+(const Complex &obj) const;
     Complex operator-(const Complex &obj) const;
     Complex operator*(const Complex &obj) const;
     Complex operator/(const Complex &obj) const;
+
+    // Getters
+    double get_real() const;
+    double get_imag() const;
+
 };
 
 #endif

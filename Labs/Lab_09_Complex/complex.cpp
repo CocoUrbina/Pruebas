@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include "complex.hpp"
 
@@ -34,12 +35,14 @@ Complex::~Complex(){
 }
 
 // Norm (8)
-double Complex::norm(){
-  return std::sqrt(real *real + imag * imag)
+double Complex::norm() const {
+  return std::sqrt(real * real + imag * imag) ;
 }
 
 // Conjugate (9)
-
+Complex Complex::conjugate() const {
+  return Complex(real, -imag);
+}
 
 // Sobrecargas (10)
 Complex Complex::operator+(const Complex &obj) const {
@@ -68,8 +71,20 @@ Complex Complex::operator*(const Complex &obj) const {
 
 Complex Complex::operator/(const Complex &obj) const {
   Complex result(real, imag);
-  result.real = (real * obj.real + imag * obj.imag) / (obj.norm() * obj.norm())  ;
-  result.imag = (imag * obj.real - real * obj.imag) / (obj.norm() * obj.norm());
+  double denom = obj.real * obj.real + obj.imag * obj.imag;
+
+  result.real = (real * obj.real + imag * obj.imag) / denom;
+  result.imag = (imag * obj.real - real * obj.imag) / denom;
 
   return result;
 }
+
+// Getters
+double Complex::get_real() const {
+    return real;
+}
+
+double Complex::get_imag() const {
+    return imag;
+}
+
