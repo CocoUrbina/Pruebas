@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 // Step RK4
 double step_rk4(double (*func)(double, double), double x, double y, double h){
@@ -10,38 +11,27 @@ double step_rk4(double (*func)(double, double), double x, double y, double h){
   return y + (h/6.0)*(k_1 + 2*k_2 + 2*k_3 + k_4);
 }
 
-// Integral
-double int_rk4(double (*func)(double, double), double x_0, double x_1, double y_0, int N){
-  double h = (x_1 - x_0) / N;
-  double x = x_0;
-  double y = y_0;
-
-  for (int i = 0; i < N; ++i){
-    y = step_rk4(func, x, y, h);
-    x = x + h;
-  }
-
-  return y;
-}
-
 // EDO
-double func(double x, double y){
+double fInt(double x, double y){
     return 2*(1 - y) - std::exp(-4*x);
 }
 
+// MAIN
 int main() {
     double x_0 = 0.0; // lower limit
     double x_1 = 2.0; // upper limit
     double y_0 = 1.0; // Initial condition
-    int N = 100;     // Steps
+    int N = 100;
+    double hval = (x_1 - x_0) / N;
+    std::cout.precision(8);
+    for(int i = 0; i < N; ++i){
 
-    double y_final = int_rk4(func, x_0, x_1, y_0, N);
+      std::cout << x_0 << " " << y_0 << std::endl;
 
-    std::cout << "y(" << x_1 << ") ≈ " << y_final << "\n";
+      double yN = step_rk4(fInt, x_0, y_0, hval);
+      x_0 = x_0 + hval;
+      y_0 = yN;
+    }
 
     return 0;
 }
-
-
-
-
