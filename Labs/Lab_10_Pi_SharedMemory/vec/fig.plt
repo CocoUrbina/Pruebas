@@ -23,7 +23,7 @@ set xtics scale 2
 f(x) = x
 # hace una nueva funcion
 
-plot 'speedupVec.dat' u 1:2 w p pt 7 ps 2.5 lc rgb "red" t 'Escalabilidad \texttt{vector.cpp}',\
+plot 'speedupVector.dat' u 1:2 w p pt 7 ps 2.5 lc rgb "red" t 'Escalabilidad \texttt{vector.cpp}',\
      f(x) w l lw 3 lc rgb "red" t 'Escalabilidad Lineal'
 
 # plot 'speedup.dat' : plotea la data de speedup.dat

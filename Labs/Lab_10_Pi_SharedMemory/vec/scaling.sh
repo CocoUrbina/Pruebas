@@ -24,14 +24,14 @@ fi
 echo "Compilación exitosa: vector.x generado"
 
 #============= Blanquear el archivo ====================
-if [ -f scaling.dat ]; then
+if [ -f speedupVector.dat ]; then
     echo "Eliminando archivo previo scaling.dat..."
-    rm scaling.dat
+    rm speedupVector.dat
 fi
 
 #============ Ejecutar el ejecutable! ================
 echo "Ejecutando pruebas de escalabilidad..."
-for (( t=1; t<=MAX_THREADS; t++ )); do
+for (( t=1; t<=${MAX_THREADS}; t++ )); do
     echo "Ejecutando con $t hilos..."
     OMP_NUM_THREADS=$t ./vector.x
 done
