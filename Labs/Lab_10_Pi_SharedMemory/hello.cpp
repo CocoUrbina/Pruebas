@@ -15,3 +15,18 @@ int main(){
 
   return 0;
 }
+
+// =========== #include <omp.h> ==============
+// Biblioteca con OpenMP
+//
+// ========= omp_set_num_threads(4); =========
+// Con esto se, puede decir con cuantos hilos trabajar
+//
+// ====== #pragma omp parallel ==============
+// Inicia la región en paralelo
+//
+// ========= omp_get_thread_num() ===========
+//retorna el id del hilo
+//
+//Para ejecutar
+// g++ hello.cpp -o hello.x -fopenmp
