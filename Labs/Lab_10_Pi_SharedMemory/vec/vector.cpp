@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream> // para exportar los datos
 #include <vector>
 #include <sys/time.h>
 
@@ -20,26 +21,39 @@ double seconds()
 
 int main(){
 
-  int n = 500000000;
+  int n = 150000000;
 
   std::vector<double> a(n, 1.0);
   std::vector<double> b(n, 3.5);
   std::vector<double> c(n, 0.0);
 
+  // Exportacion de los resultados (hilos, tiempo)
+  std::ofstream outfile("speedupVector.dat", std::ios::app);
+  if (!outfile) {
+    std::cerr << "Error al abrir el archivo de salida.\n";
+    return 1;
+  }
+
   int num_procs;
   double time_1 = seconds();
-  #pragma omp parallel
+  #pragma omp parallel // crea grupo de hilos
   {
-    num_procs = omp_get_num_threads();
-    #pragma omp for
+    num_procs = omp_get_num_threads(); //deberia ser el maximo si no se setea
+    #pragma omp for // dentro de esta region, divide automaticamente el for entre todos los hilos del grupo
     for(int i = 0; i < n; ++i){
       c[i] = a[i] + b[i];
     }
   }
   double time_2 = seconds();
+  
+  double elapsed = time_2 - time_1;
 
   std::cout << "Number of Threads: " << num_procs << std::endl;
-  std::cout << "Time to complete loop: " << time_2 - time_1 << std::endl;
+  std::cout << "Time to complete loop: " << elapsed << std::endl;
+
+  // Guardar los datos en el archivo speedupVector.dat
+  outfile << num_procs << " " << elapsed << "\n";
+  outfile.close();
 
   return 0;
 }

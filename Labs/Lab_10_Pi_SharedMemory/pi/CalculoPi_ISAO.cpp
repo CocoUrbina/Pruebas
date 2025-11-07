@@ -26,6 +26,9 @@ double sumRiemann( double limInf, double limSup, int numRect, double (*func)(dou
   
   int num_procs;
   double time_1 = seconds();
+
+  std::cout << "Default threads: " << omp_get_max_threads() << std::endl; 
+
   #pragma omp parallel
   {
     num_procs = omp_get_num_threads();
