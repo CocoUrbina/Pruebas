@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <sys/time.h>
 #include <omp.h>
 
@@ -43,10 +44,19 @@ double riemann(double (*func)(double), double  lower_limit, double  upper_limit,
 
   // tiempo despues de finalizar los calculos
   double time_2 = seconds(); 
+  double elapsed = time_2 - time_1;
 
   std::cout << "Used Threads: " << num_procs << std::endl;
-  std::cout << "Time: " << time_2 - time_1 << std::endl;
+  std::cout << "Time: " << elapsed << std::endl;
 
+  // Exportar los resultados al archivo scaling.dat
+  std::ofstream outfile("scaling.dat", std::ios::app);
+  if (!outfile) {
+    std::cerr << "Error al abrir el archivo de salida.\n";
+  } else {
+    outfile << num_procs << " " << elapsed << "\n";
+    outfile.close();
+  }
 
   return tA * mesh;
 }
