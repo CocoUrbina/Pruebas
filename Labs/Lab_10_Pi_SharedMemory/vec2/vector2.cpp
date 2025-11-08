@@ -51,7 +51,7 @@ int main(){
   std::cout << "Number of Threads: " << num_procs << std::endl;
   std::cout << "Time to complete loop: " << elapsed << std::endl;
 
-  // Guardar los datos en el archivo speedupVector.dat
+  // Guardar los datos en el archivo scaling.dat
   outfile << num_procs << " " << elapsed << "\n";
   outfile.close();
 
