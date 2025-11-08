@@ -16,9 +16,9 @@ double seconds() {
 }
 
 // Funcion que calcula la suma de Riemann
-float riemann(float (*func)(float), float  lower_limit, float  upper_limit, int partitions){
-  float tA = 0.0;
-  float mesh = (upper_limit - lower_limit) / partitions;
+double riemann(double (*func)(double), double  lower_limit, double  upper_limit, int partitions){
+  double tA = 0.0;
+  double mesh = (upper_limit - lower_limit) / partitions;
  
   // para saber cuantos hilos tenemos
   int num_procs;
@@ -32,7 +32,9 @@ float riemann(float (*func)(float), float  lower_limit, float  upper_limit, int 
   // inicializa la region paralela
   #pragma omp parallel
   {
+    #pragma omp master // para que solo lo ejecute un hilo
     num_procs = omp_get_num_threads(); // number of threads
+
     #pragma omp for reduction(+: tA) // to avoid race conditions
     for (int  i = 1; i <= partitions; i++){
       tA += func(lower_limit +  mesh * i - mesh/2);
@@ -50,13 +52,13 @@ float riemann(float (*func)(float), float  lower_limit, float  upper_limit, int 
 }
 
 // Funcion integrando
-float integrand(float x){
+double integrand(double x){
   return 4.0 / (1 + x*x);
 }
 
 // main
 int  main (){
-  float result = riemann(integrand, 0.0, 1.0, 1000000000);
+  double result = riemann(integrand, 0.0, 1.0, 1000000000);
   std::cout << "Aproximacion = " << result << std::endl; 
   return 0;
 }
