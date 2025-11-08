@@ -2,38 +2,61 @@
 #include <sys/time.h>
 #include <omp.h>
 
-  7 // Esta función se utiliza para calcular el tiempo que tarda
-  8 // la ejecución de ciertas funciones
-  9 // Está basada en el uso de una función primitiva que evalúa al tiempo
- 10 // transcurrido desde cierto valor de referencia
-double seconds()
-{
-struct timeval tmp;
-double sec;
-gettimeofday( &tmp, (struct timezone *)0 );
-sec = tmp.tv_sec + ((double)tmp.tv_usec)/1000000.0;
-return sec;
+   // Esta función se utiliza para calcular el tiempo que tarda
+   // la ejecución de ciertas funciones
+   // Está basada en el uso de una función primitiva que evalúa al tiempo
+   // transcurrido desde cierto valor de referencia
+double seconds() {
+  struct timeval tmp;
+  double sec;
+  gettimeofday( &tmp, (struct timezone *)0 );
+  sec = tmp.tv_sec + ((double)tmp.tv_usec)/1000000.0;
+
+  return sec;
 }
 
-
-
+// Funcion que calcula la suma de Riemann
 float riemann(float (*func)(float), float  lower_limit, float  upper_limit, int partitions){
   float tA = 0.0;
   float mesh = (upper_limit - lower_limit) / partitions;
-  for (int  i = 1; i <= partitions; i++){
-    tA += func(lower_limit +  mesh * i - mesh/2);
+ 
+  // para saber cuantos hilos tenemos
+  int num_procs;
+
+  // tiempo antes de iniciar los calculo
+  double time_1 = seconds();
+
+  //veamos cuanto es el  maximo de hilos disponibles
+  std::cout << "Default Threads: " << omp_get_max_threads() << std::endl;
+
+  // inicializa la region paralela
+  #pragma omp parallel
+  {
+    num_procs = omp_get_num_threads(); // number of threads
+    #pragma omp for reduction(+: tA) // to avoid race conditions
+    for (int  i = 1; i <= partitions; i++){
+      tA += func(lower_limit +  mesh * i - mesh/2);
+    }
   }
+
+  // tiempo despues de finalizar los calculos
+  double time_2 = seconds(); 
+
+  std::cout << "Used Threads: " << num_procs << std::endl;
+  std::cout << "Time: " << time_2 - time_1 << std::endl;
+
 
   return tA * mesh;
 }
 
-
+// Funcion integrando
 float integrand(float x){
   return 4.0 / (1 + x*x);
 }
 
+// main
 int  main (){
-  float result = riemann(integrand, 0.0, 1.0, 1000);
+  float result = riemann(integrand, 0.0, 1.0, 1000000000);
   std::cout << "Aproximacion = " << result << std::endl; 
   return 0;
 }
