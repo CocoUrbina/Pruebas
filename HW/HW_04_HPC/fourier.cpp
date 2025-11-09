@@ -35,7 +35,7 @@ void dft(std::vector< std::complex<double> > &input, std::vector< std::complex<d
     #pragma omp master // para que solo lo ejecute un hilo
     num_procs = omp_get_num_threads(); // number of threads
     
-    #pragma omp for reduction(+: sum) // to avoid race conditions
+    #pragma omp for
     for(int k = 0; k < N; ++k){
       std::complex<double> sum = {0.0, 0.0};
       for(int n = 0; n < N; ++n){
@@ -44,6 +44,8 @@ void dft(std::vector< std::complex<double> > &input, std::vector< std::complex<d
       }
       output[k] = sum;
     }
+
+  #pragma omp master // para que solo lo ejecute un hilo
   std::cout << "Used Threads: " << num_procs << std::endl;
   }
 }
