@@ -20,7 +20,7 @@ void dft(std::vector< std::complex<double> > &input, std::vector< std::complex<d
   // Tamaño del vector de entrada
   int N = input.size();
 
-  int num_procs;
+  int num_procs = 0;
 
   std::cout << "Default Threads: " << omp_get_max_threads() << std::endl;
 
@@ -30,8 +30,8 @@ void dft(std::vector< std::complex<double> > &input, std::vector< std::complex<d
   // donde la primera entrada es la parte real y la segunda entrada es la parte imaginaria
   // Rutina principal
 
-  #pragma omp parallel
-  {
+  #pragma omp parallel // inicializa region paralela
+  { 
     #pragma omp master // para que solo lo ejecute un hilo
     num_procs = omp_get_num_threads(); // number of threads
     
@@ -44,10 +44,10 @@ void dft(std::vector< std::complex<double> > &input, std::vector< std::complex<d
       }
       output[k] = sum;
     }
+  } // fin region paralelo
 
-  #pragma omp master // para que solo lo ejecute un hilo
   std::cout << "Used Threads: " << num_procs << std::endl;
-  }
+
 }
 
 int main() {
