@@ -26,7 +26,7 @@ int main(){
   }
 
   // 4-Para todos los procesos, utilice el método resize() para asignar suficiente memoria para nlocal elementos para los vectores local_a y local_b. Defina nlocal como lo hicimos en clase. Puede asumir que el número de elementos N es un múltiplo del número de procesos size (i.e., no hay rest) (0.5%)
-  nlocal = N / size;
+  int nlocal = N / size;
   local_a.resize(nlocal);
   local_b.resize(nlocal);
 
@@ -75,7 +75,7 @@ int main(){
   }
 
 
-  MPI_Finalize():
+  MPI_Finalize();
 
   return 0;
 }
